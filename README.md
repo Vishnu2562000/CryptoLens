@@ -1,4 +1,4 @@
-# crypto_lens
+# CryptoLens
 
 <a name="readme-top"></a>
 
@@ -22,7 +22,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Vishnu2562000/crypto_lens">
+  <a href="https://github.com/Vishnu2562000/CryptoLens">
     <img src="assets/logo02.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -31,12 +31,12 @@
   <p align="center">
     Elegant NFT Marketplace
     <br />
-    <a href="https://github.com/Vishnu2562000/crypto_lens"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Vishnu2562000/CryptoLens"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Vishnu2562000/crypto_lens/issues">Report Bug</a>
+    <a href="https://github.com/Vishnu2562000/CryptoLens/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Vishnu2562000/crypto_lens/issues">Request Feature</a>
+    <a href="https://github.com/Vishnu2562000/CryptoLens/issues">Request Feature</a>
   </p>
 </div>
 
@@ -140,7 +140,7 @@ To get started with CryptoLens, follow these steps:
 - [x] Commision for Marketplace contract for every new NFT
 - [x] Every transaction stored in goerli testnet [block explorer](https://goerli.etherscan.io/) in etherscan
 
-See the [open issues](https://github.com/Vishnu2562000/crypto_lens/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/Vishnu2562000/CryptoLens/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -165,7 +165,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT License. See [`LICENSE`](https://github.com/Vishnu2562000/crypto_lens/blob/main/LICENSE) for more information.
+Distributed under the MIT License. See [`LICENSE`](https://github.com/Vishnu2562000/CryptoLens/blob/main/LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -175,6 +175,6 @@ Distributed under the MIT License. See [`LICENSE`](https://github.com/Vishnu2562
 
 Vishnu Vardhan Chandragiri - [chandragirivishnuvardhan@gmail.com](mailto:chandragirivishnuvardhan@gmail.com)
 
-Project Link: [https://github.com/Vishnu2562000/crypto_lens](https://github.com/Vishnu2562000/crypto_lens)
+Project Link: [https://github.com/Vishnu2562000/CryptoLens](https://github.com/Vishnu2562000/CryptoLens)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
