@@ -40,7 +40,6 @@ const CreateItem = () => {
       const url = `${subDomain}/ipfs/${added.path}`;
 
       setFileUrl(url);
-      console.log(url);
     } catch (error) {
       console.log("Error uploading file: ", error);
     }

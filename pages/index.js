@@ -25,7 +25,6 @@ const Home = () => {
   useEffect(() => {
     fetchNFTs()
       .then((items) => {
-        console.log(items);
         setNfts(items.reverse());
         setNftsCopy(items);
         setIsLoading(false);
