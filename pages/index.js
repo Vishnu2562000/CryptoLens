@@ -102,6 +102,7 @@ const Home = () => {
   });
 
   const creators = getCreators(nftsCopy);
+  creators.sort((creator1, creator2) => creator2.sumall - creator1.sumall);
 
   return (
     <div className="flex justify-center sm:px-4 p-12">
