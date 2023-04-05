@@ -28,7 +28,10 @@ export const NFTProvider = ({ children }) => {
         const tokenURI = await contract.tokenURI(tokenId);
         if (
           !tokenURI.includes("https://ipfs.infura.io:5001") &&
-          !tokenURI.includes("https:/ipfs.io")
+          !tokenURI.includes("https:/ipfs.io") &&
+          !tokenURI.includes(
+            "https://ipfs.io/ipfs/QmZ9b88tpS6dxzFfDUaJeUVVZF8mq4gqDowKpS3Gpw4UgA"
+          )
         ) {
           const {
             data: { image, name, description },
