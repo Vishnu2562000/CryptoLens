@@ -11,7 +11,7 @@ const NFTCard = ({ nft, onProfilePage }) => {
 
   return (
     <Link href={{ pathname: "/nft-details", query: nft }}>
-      <div className="flex-1 flex-col justify-between min-w-215 max-w-full xs:w-full sm:w-full sm:space-x-2 minmd:min-w-256 minlg:min-w-400 dark:bg-nft-black-3 bg-white rounded-2xl p-4 m-4 minlg:m-8 sm:my-2 sm:mx-2 cursor-pointer shadow-md">
+      <div className="flex-1 flex-col justify-between min-w-215 max-w-max xs:w-full sm:w-full sm:space-x-2 minmd:min-w-256 minlg:min-w-400 dark:bg-nft-black-3 bg-white rounded-2xl p-4 m-4 minlg:m-8 sm:my-2 sm:mx-2 cursor-pointer shadow-md">
         <div className="relative w-full h-52 sm:h-36 xs:h-56 minmd:h-60 minlg:h-300 rounded-2xl overflow-hidden">
           <Image
             src={nft.image || images[`nft${nft.i}`]}
