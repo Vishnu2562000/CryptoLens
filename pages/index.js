@@ -107,7 +107,7 @@ const Home = () => {
   return (
     <div className="flex justify-center sm:px-4 p-12">
       <div className="w-full">
-        <div className="minmid:w-4/5 mx-auto">
+        <div className="minmd:w-4/5 mx-auto">
           <Banner
             name={
               <>
