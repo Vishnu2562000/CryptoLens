@@ -58,97 +58,142 @@ export const NFTProvider = ({ children }) => {
   };
 
   const fetchMyNFTsOrCreatedNFTs = async (type) => {
-    setIsLoadingNFT(false);
+    try {
+      setIsLoadingNFT(false);
 
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
 
-    const contract = fetchContract(signer);
-    const data =
-      type === "fetchItemsListed"
-        ? await contract.fetchItemsListed()
-        : await contract.fetchMyNFTs();
+      const contract = fetchContract(signer);
+      const data =
+        type === "fetchItemsListed"
+          ? await contract.fetchItemsListed()
+          : await contract.fetchMyNFTs();
 
-    const items = await Promise.all(
-      data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
-        const tokenURI = await contract.tokenURI(tokenId);
-        const {
-          data: { image, name, description },
-        } = await axios.get(tokenURI);
-        const price = ethers.utils.formatUnits(
-          unformattedPrice.toString(),
-          "ether"
-        );
+      const items = await Promise.all(
+        data.map(
+          async ({ tokenId, seller, owner, price: unformattedPrice }) => {
+            const tokenURI = await contract.tokenURI(tokenId);
+            const {
+              data: { image, name, description },
+            } = await axios.get(tokenURI);
+            const price = ethers.utils.formatUnits(
+              unformattedPrice.toString(),
+              "ether"
+            );
 
-        return {
-          price,
-          tokenId: tokenId.toNumber(),
-          seller,
-          owner,
-          image,
-          name,
-          description,
-          tokenURI,
-        };
-      })
-    );
+            return {
+              price,
+              tokenId: tokenId.toNumber(),
+              seller,
+              owner,
+              image,
+              name,
+              description,
+              tokenURI,
+            };
+          }
+        )
+      );
 
-    return items;
+      return items;
+    } catch (error) {
+      if (error.message === "User rejected") {
+        alert("Transaction rejected. Please try again.");
+      } else {
+        console.error(error);
+        alert("An error occurred while fetching NFTs. Please try again.");
+      }
+    }
   };
 
   const createSale = async (url, formInputPrice, isReselling, id) => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    try {
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
 
-    const price = ethers.utils.parseUnits(formInputPrice, "ether");
-    const contract = fetchContract(signer);
-    const listingPrice = await contract.getListingPrice();
+      const price = ethers.utils.parseUnits(formInputPrice, "ether");
+      const contract = fetchContract(signer);
+      const listingPrice = await contract.getListingPrice();
 
-    const transaction = !isReselling
-      ? await contract.createToken(url, price, {
-          value: listingPrice.toString(),
-        })
-      : await contract.resellToken(id, price, {
+      let transaction;
+      if (!isReselling) {
+        transaction = await contract.createToken(url, price, {
           value: listingPrice.toString(),
         });
+      } else {
+        transaction = await contract.resellToken(id, price, {
+          value: listingPrice.toString(),
+        });
+      }
 
-    setIsLoadingNFT(true);
-    await transaction.wait();
+      setIsLoadingNFT(true);
+      await transaction.wait();
+    } catch (error) {
+      if (error.message === "User rejected") {
+        alert("Transaction rejected. Please try again.");
+      } else {
+        console.error(error);
+        alert("An error occurred while creating the sale. Please try again.");
+      }
+    } finally {
+      setIsLoadingNFT(false);
+    }
   };
 
   const buyNft = async (nft) => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(
-      MarketAddress,
-      MarketAddressABI,
-      signer
-    );
+    try {
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        MarketAddress,
+        MarketAddressABI,
+        signer
+      );
 
-    const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(nft.tokenId, {
-      value: price,
-    });
-    setIsLoadingNFT(true);
-    await transaction.wait();
-    setIsLoadingNFT(false);
+      const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+      const transaction = await contract.createMarketSale(nft.tokenId, {
+        value: price,
+      });
+      setIsLoadingNFT(true);
+      await transaction.wait();
+      setIsLoadingNFT(false);
+    } catch (error) {
+      if (error.message === "User rejected") {
+        alert("Transaction rejected. Please try again.");
+      } else {
+        console.error(error);
+        alert("An error occurred while buying the NFT. Please try again.");
+      }
+    }
   };
 
   const connectWallet = async () => {
     if (!window.ethereum) return alert("Please install MetaMask.");
 
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
-    setCurrentAccount(accounts[0]);
-    window.location.reload();
+      setCurrentAccount(accounts[0]);
+      window.location.reload();
+    } catch (error) {
+      if (error.message === "User rejected") {
+        alert("Connection to MetaMask wallet rejected. Please try again.");
+      } else {
+        console.error(error);
+        alert(
+          "An error occurred while connecting to MetaMask. Please try again."
+        );
+      }
+    }
   };
 
   const checkIfWalletIsConnect = async () => {
@@ -161,7 +206,42 @@ export const NFTProvider = ({ children }) => {
     } else {
       console.log("No accounts found");
     }
+
+    // Define the event listener functions
+    const handleAccountsChanged = (newAccounts) => {
+      if (newAccounts.length) {
+        setCurrentAccount(newAccounts[0]);
+        window.location.reload();
+      } else {
+        setCurrentAccount("");
+        window.location.reload();
+      }
+    };
+
+    const handleDisconnect = () => {
+      setCurrentAccount("");
+      window.location.reload();
+    };
+
+    // Add event listeners for MetaMask events
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+    window.ethereum.on("disconnect", handleDisconnect);
+
+    // Cleanup event listeners on component unmount
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        );
+        window.ethereum.removeListener("disconnect", handleDisconnect);
+      }
+    };
   };
+
+  useEffect(() => {
+    checkIfWalletIsConnect();
+  }, []);
 
   useEffect(() => {
     checkIfWalletIsConnect();

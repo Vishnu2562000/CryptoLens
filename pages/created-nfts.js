@@ -4,23 +4,40 @@ import { NFTContext } from "../context/NFTContext";
 import { Loader, NFTCard } from "../components";
 
 const CreatorDashboard = () => {
-  const { fetchMyNFTsOrCreatedNFTs } = useContext(NFTContext);
+  const { fetchMyNFTsOrCreatedNFTs, currentAccount } = useContext(NFTContext);
   const [nfts, setNfts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchMyNFTsOrCreatedNFTs("fetchItemsListed")
-      .then((items) => {
-        setNfts(items);
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    if (currentAccount) {
+      fetchMyNFTsOrCreatedNFTs("fetchItemsListed")
+        .then((items) => {
+          setNfts(items);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [currentAccount]);
 
   if (isLoading) {
     return (
       <div className="flexStart min-h-screen">
         <Loader />
+      </div>
+    );
+  }
+
+  if (!currentAccount) {
+    return (
+      <div className="flexCenter min-h-screen">
+        <h1 className="font-poppins dark:text-white text-nft-black-1 text-3xl font-extrabold">
+          Please Connect your MetaMask account to see the NFTs you created
+        </h1>
       </div>
     );
   }
