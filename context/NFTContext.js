@@ -158,12 +158,23 @@ export const NFTProvider = ({ children }) => {
       );
 
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+
+      // Get user's balance
+      const userBalance = await provider.getBalance(signer.getAddress());
+
+      // Check if the user's balance is sufficient
+      if (userBalance.lt(price)) {
+        alert("Insufficient funds to buy this NFT!");
+        return false;
+      }
+
       const transaction = await contract.createMarketSale(nft.tokenId, {
         value: price,
       });
       setIsLoadingNFT(true);
       await transaction.wait();
       setIsLoadingNFT(false);
+      return true;
     } catch (error) {
       if (error.message === "User rejected") {
         alert("Transaction rejected. Please try again.");
@@ -171,6 +182,7 @@ export const NFTProvider = ({ children }) => {
         console.error(error);
         alert("An error occurred while buying the NFT. Please try again.");
       }
+      return false;
     }
   };
 

@@ -52,7 +52,15 @@ const ResellNFT = () => {
           handleClick={(e) => setPrice(e.target.value)}
         />
 
-        {image && <Image className="rounded mt-4" width="350" src={image} />}
+        {image && (
+          <Image
+            className="rounded mt-4"
+            width="350"
+            height="350"
+            src={image}
+            alt="NFT Image"
+          />
+        )}
 
         <div className="mt-7 w-full flex justify-end">
           <Button
