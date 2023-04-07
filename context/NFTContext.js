@@ -7,6 +7,13 @@ import { MarketAddress, MarketAddressABI } from "./constants";
 export const NFTContext = React.createContext();
 // const { ethers } = require('hardhat');
 const ethers = require("ethers");
+
+const createWeb3ModalConnection = async () => {
+  const web3Modal = new Web3Modal();
+  const connection = await web3Modal.connect();
+  return new ethers.providers.Web3Provider(connection);
+};
+
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(MarketAddress, MarketAddressABI, signerOrProvider);
 
@@ -85,12 +92,10 @@ export const NFTProvider = ({ children }) => {
     try {
       setIsLoadingNFT(false);
 
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
+      const provider = await createWeb3ModalConnection();
       const signer = provider.getSigner();
 
-      const contract = fetchContract(signer);
+      const contract = await fetchContract(signer);
       const data =
         type === "fetchItemsListed"
           ? await contract.fetchItemsListed()
@@ -133,13 +138,11 @@ export const NFTProvider = ({ children }) => {
 
   const createSale = async (url, formInputPrice, isReselling, id) => {
     try {
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
+      const provider = await createWeb3ModalConnection();
       const signer = provider.getSigner();
+      const contract = await fetchContract(signer);
 
       const price = ethers.utils.parseUnits(formInputPrice, "ether");
-      const contract = fetchContract(signer);
       const listingPrice = await contract.getListingPrice();
 
       let transaction;
@@ -167,15 +170,9 @@ export const NFTProvider = ({ children }) => {
 
   const buyNft = async (nft) => {
     try {
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
+      const provider = await createWeb3ModalConnection();
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        MarketAddress,
-        MarketAddressABI,
-        signer
-      );
+      const contract = await fetchContract(signer);
 
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
 
