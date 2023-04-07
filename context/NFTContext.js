@@ -57,6 +57,30 @@ export const NFTProvider = ({ children }) => {
     return items;
   };
 
+  const handleError = (error, customErrorMessage) => {
+    const message = error.message || error.toString();
+    if (message.includes("user rejected transaction")) {
+      alert("Looks like you rejected to sign the transaction!");
+    } else if (message.includes("insufficient funds")) {
+      alert(
+        "Insufficient funds in your wallet. Please add more funds and try again"
+      );
+    } else if (message.includes("nonce too low")) {
+      alert(
+        "Transaction nonce too low. Please wait for pending transactions to complete and try again"
+      );
+    } else if (message.includes("gas price too low")) {
+      alert("Gas price too low. Please increase the gas price and try again");
+    } else if (message.includes("gas limit too low")) {
+      alert("Gas limit too low. Please increase the gas limit and try again");
+    } else if (message.includes("execution reverted")) {
+      alert("Transaction failed. Please check your input values and try again");
+    } else {
+      console.error(error);
+      alert(customErrorMessage);
+    }
+  };
+
   const fetchMyNFTsOrCreatedNFTs = async (type) => {
     try {
       setIsLoadingNFT(false);
@@ -100,12 +124,10 @@ export const NFTProvider = ({ children }) => {
 
       return items;
     } catch (error) {
-      if (error.message === "User rejected") {
-        alert("Transaction rejected. Please try again.");
-      } else {
-        console.error(error);
-        alert("An error occurred while fetching NFTs. Please try again.");
-      }
+      handleError(
+        error,
+        "An error occurred while fetching NFTs. Please try again."
+      );
     }
   };
 
@@ -134,12 +156,10 @@ export const NFTProvider = ({ children }) => {
       setIsLoadingNFT(true);
       await transaction.wait();
     } catch (error) {
-      if (error.message === "User rejected") {
-        alert("Transaction rejected. Please try again.");
-      } else {
-        console.error(error);
-        alert("An error occurred while creating the sale. Please try again.");
-      }
+      handleError(
+        error,
+        "An error occurred while creating the sale. Please try again."
+      );
     } finally {
       setIsLoadingNFT(false);
     }
@@ -176,12 +196,10 @@ export const NFTProvider = ({ children }) => {
       setIsLoadingNFT(false);
       return true;
     } catch (error) {
-      if (error.message === "User rejected") {
-        alert("Transaction rejected. Please try again.");
-      } else {
-        console.error(error);
-        alert("An error occurred while buying the NFT. Please try again.");
-      }
+      handleError(
+        error,
+        "An error occurred while buying the NFT. Please try again."
+      );
       return false;
     }
   };
@@ -197,14 +215,10 @@ export const NFTProvider = ({ children }) => {
       setCurrentAccount(accounts[0]);
       window.location.reload();
     } catch (error) {
-      if (error.message === "User rejected") {
-        alert("Connection to MetaMask wallet rejected. Please try again.");
-      } else {
-        console.error(error);
-        alert(
-          "An error occurred while connecting to MetaMask. Please try again."
-        );
-      }
+      handleError(
+        error,
+        "An error occurred while connecting to MetaMask. Please try again."
+      );
     }
   };
 
