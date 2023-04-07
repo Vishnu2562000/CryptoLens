@@ -255,10 +255,6 @@ export const NFTProvider = ({ children }) => {
     checkIfWalletIsConnect();
   }, []);
 
-  useEffect(() => {
-    checkIfWalletIsConnect();
-  }, []);
-
   return (
     <NFTContext.Provider
       value={{
