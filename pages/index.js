@@ -52,9 +52,11 @@ const Home = () => {
   }, [activeSelect]);
 
   const onHandleSearch = (value) => {
-    const filteredNfts = nfts.filter(({ name }) =>
-      name.toLowerCase().includes(value.toLowerCase())
-    );
+    const filteredNfts = nfts.filter((nft) => {
+      if (!nft) return false;
+      const { name } = nft;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
 
     if (filteredNfts.length === 0) {
       setNfts(nftsCopy);
